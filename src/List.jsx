@@ -1,7 +1,13 @@
-import React from "react";
+import React from 'react';
 
-function List({ item }) {
-  return <li>{item}</li>;
+function List(props) {
+  return (
+    <ul>
+      {props.items.map((item, index) => (
+        <li key={index}>{item.name}</li>
+      ))}
+    </ul>
+  );
 }
 
 export default List;

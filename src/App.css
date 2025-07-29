@@ -20,3 +20,9 @@ body {
 .filter-list {
   margin-top: 20px;
 }
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+

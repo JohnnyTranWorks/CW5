@@ -1,61 +1,51 @@
-import React, { useState } from "react";
-import List from "./List";
+import React, { Component } from 'react';
+import List from './List';
 
-const items = [
-  { name: "Apple", type: "Fruit" },
-  { name: "Pineapple", type: "Fruit" },
-  { name: "Banana", type: "Fruit" },
-  { name: "Pear", type: "Fruit" },
-  { name: "Strawberry", type: "Fruit" },
-  { name: "Orange", type: "Fruit" },
-  { name: "Lettuce", type: "Vegetable" },
-  { name: "Cucumber", type: "Vegetable" },
-  { name: "Eggplant", type: "Vegetable" },
-  { name: "Squash", type: "Vegetable" },
-  { name: "Bell pepper", type: "Vegetable" },
-  { name: "Onion", type: "Vegetable" },
-];
-
-function FilteredList() {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filter, setFilter] = useState("All");
-
-  function handleFilterChange(type) {
-    setFilter(type);
+class FilteredList extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      search: "",
+      type: "All"
+    };
   }
 
-  const filteredItems = items.filter((item) => {
+  onSearch = (event) => {
+    this.setState({ search: event.target.value });
+  };
+
+  onFilterChange = (event) => {
+    this.setState({ type: event.target.value });
+  };
+
+  filterItem = (item) => {
+    const matchesType = this.state.type === "All" || item.type === this.state.type;
+    const matchesSearch = item.name.toLowerCase().includes(this.state.search.toLowerCase());
+    return matchesType && matchesSearch;
+  };
+
+  render() {
+    const filteredItems = this.props.items.filter(this.filterItem);
+
     return (
-      (filter === "All" || item.type === filter) &&
-      item.name.toLowerCase().includes(searchTerm.toLowerCase())
+      <div className="filter-list">
+        <h3>Search Produce</h3>
+        <label>Filter by Type: </label>
+        <select onChange={this.onFilterChange} value={this.state.type}>
+          <option value="All">All</option>
+          <option value="Fruit">Fruit</option>
+          <option value="Vegetable">Vegetable</option>
+        </select>
+
+        <br /><br />
+
+        
+        <input type="text" placeholder="Search" onChange={this.onSearch} />
+
+        <List items={filteredItems} />
+      </div>
     );
-  });
-
-  return (
-    <div style={{ textAlign: "center" }}>
-      <div style={{ display: "flex", justifyContent: "center", gap: "10px", marginBottom: "10px" }}>
-        <button onClick={() => handleFilterChange("All")}>All</button>
-        <button onClick={() => handleFilterChange("Fruit")}>Fruit</button>
-        <button onClick={() => handleFilterChange("Vegetable")}>Vegetable</button>
-      </div>
-
-      <div>
-        <label>Search </label>
-        <input
-          type="text"
-          placeholder="Search"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-      </div>
-
-      <ul style={{ listStyleType: "none", padding: 0 }}>
-        {filteredItems.map((item, index) => (
-          <List key={index} item={item.name} />
-        ))}
-      </ul>
-    </div>
-  );
+  }
 }
 
 export default FilteredList;
