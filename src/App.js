@@ -24,7 +24,9 @@ class App extends Component {
         return (
             <div className="App">
                 <HelloWorld />
-                <Counter />
+                <div style={{ marginBottom: "30px" }}>
+                    <Counter />
+                </div>
                 <FilteredList items={produce} />
             </div>
         );
